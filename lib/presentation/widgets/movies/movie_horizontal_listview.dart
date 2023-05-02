@@ -2,6 +2,8 @@ import 'package:animate_do/animate_do.dart';
 import 'package:appcinema/domain/entities/movie_entity.dart';
 import 'package:flutter/material.dart';
 
+import '../../../config/helpers/human_format.dart';
+
 class MovieHorizontalListView extends StatelessWidget {
 
   final List<MovieEntity> movies;
@@ -105,7 +107,7 @@ class _Side extends StatelessWidget {
                const SizedBox( width: 3 ),
                Text('${ movie.voteAverage}', style: textStyle.bodyMedium?.copyWith( color: Colors.yellow.shade800 ),), 
                const SizedBox( width: 10 ), 
-               Text('${ movie.popularity }', style: textStyle.bodySmall,)
+               Text(HumanFormat.number(movie.popularity), style: textStyle.bodySmall),
             ],
           )
 
