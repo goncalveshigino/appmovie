@@ -69,7 +69,7 @@ class _MovieHorizontalListViewState extends State<MovieHorizontalListView> {
               physics: const BouncingScrollPhysics(),
               itemCount: widget.movies.length,
               itemBuilder: (context, index){
-                 return _Side(movie: widget.movies[index]);
+                 return FadeInRight(child: _Slide(movie: widget.movies[index]));
               },
               ),
             )
@@ -81,11 +81,11 @@ class _MovieHorizontalListViewState extends State<MovieHorizontalListView> {
 }
 
 
-class _Side extends StatelessWidget {
+class _Slide extends StatelessWidget {
 
    final MovieEntity movie;
 
-  const _Side({ required this.movie });
+  const _Slide({ required this.movie });
 
   @override
   Widget build(BuildContext context) {   
@@ -109,10 +109,12 @@ class _Side extends StatelessWidget {
                 loadingBuilder: (context, child, loadingProgress){
 
                   if( loadingProgress != null){
-                     return const Padding(
-                      padding: EdgeInsets.all(8.0), 
-                      child: CircularProgressIndicator( strokeWidth: 2,),
-                    );
+                     return const Center(
+                       child: Padding(
+                          padding: EdgeInsets.all(20,), 
+                          child: CircularProgressIndicator( strokeWidth: 2,),
+                       ),
+                     );
                   }
 
 
