@@ -1,4 +1,5 @@
 import 'package:appcinema/infrastructure/mappers/movie_mapper.dart';
+import 'package:appcinema/infrastructure/models/moviedb/movie_details.dart';
 import 'package:dio/dio.dart';
 
 
@@ -89,6 +90,18 @@ class MoviedbDatasourceImpl extends MoviesDataSource {
 
 
       return _jsonToMovies(response.data);
+  }
+  
+  @override
+  Future<MovieEntity> getMovieById(String id) async {
+    final respose = await dio.get('/movie/$id');
+    if(respose.statusCode != 200) throw Exception('Movie with id: $id not found '); 
+
+
+    final movieDetails = MovieDetails.fromJson( respose.data );
+    final MovieEntity movie = MovieMapper.movieDetailsToEntity(movieDetails);
+    return movie;
+    
   }
 
 }
