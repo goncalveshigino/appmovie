@@ -2,16 +2,25 @@ import 'package:appcinema/domain/entities/movie_entity.dart';
 import 'package:appcinema/presentation/providers/movies/movies_repository_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final nowPlayingMovieProvider =
-    StateNotifierProvider<MoviesNotifier, List<MovieEntity>>((ref) {
-  final fetchMoreMovies = ref.watch(movieRepositoryProvider).getNowPlaying;
 
+
+final nowPlayingMovieProvider = StateNotifierProvider<MoviesNotifier, List<MovieEntity>>((ref) {
+  final fetchMoreMovies = ref.watch(movieRepositoryProvider).getNowPlaying;
+  return MoviesNotifier(fetchMoreMovies: fetchMoreMovies);
+});
+
+
+final popularMoviesProvider = StateNotifierProvider<MoviesNotifier, List<MovieEntity>>((ref) {
+  final fetchMoreMovies = ref.watch(movieRepositoryProvider).getPopular;
   return MoviesNotifier(fetchMoreMovies: fetchMoreMovies);
 });
 
 typedef MovieCallback = Future<List<MovieEntity>> Function({int page});
 
+
+
 class MoviesNotifier extends StateNotifier<List<MovieEntity>> {
+
   int currentPage = 0;
   bool isLoading = false;
   MovieCallback fetchMoreMovies;
@@ -21,6 +30,7 @@ class MoviesNotifier extends StateNotifier<List<MovieEntity>> {
   }) : super([]);
 
   Future<void> loadNextPage() async {
+
     if (isLoading) return;
 
     isLoading = true;
