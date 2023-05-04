@@ -38,6 +38,7 @@ class MoviesSlideShow extends StatelessWidget {
 }
 
 class _Slide extends StatelessWidget {
+  
   final MovieEntity movie;
 
   const _Slide({required this.movie});
