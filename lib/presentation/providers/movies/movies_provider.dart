@@ -53,5 +53,7 @@ class MoviesNotifier extends StateNotifier<List<MovieEntity>> {
     state = [...state, ...movies];
 
     isLoading = false;
+    
   }
+
 }

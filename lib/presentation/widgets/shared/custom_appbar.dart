@@ -24,7 +24,7 @@ class CustomAppBar extends StatelessWidget {
 
              const  Spacer(),
 
-              IconButton(onPressed: (){}, icon: Icon(Icons.search))
+              IconButton(onPressed: (){}, icon: const Icon(Icons.search))
             ],
           ),
         ),
