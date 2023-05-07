@@ -13,4 +13,6 @@ abstract class MoviesRepository {
 
  Future<MovieEntity> getMovieById( String id);
 
+ Future<List<MovieEntity>> serachMovies( String query );
+
 }

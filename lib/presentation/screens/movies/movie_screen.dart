@@ -23,6 +23,7 @@ class MovieScreen extends ConsumerStatefulWidget {
 }
 
 class MovieScreenState extends ConsumerState<MovieScreen> {
+   
   @override
   void initState() {
     super.initState();
@@ -154,13 +155,15 @@ class _ActorsByMovie extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
 
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.network(
-                      actor.profilePath,
-                      height: 180,
-                      width: 135,
-                      fit: BoxFit.cover,
+                  FadeInRight(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Image.network(
+                        actor.profilePath,
+                        height: 180,
+                        width: 135,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
 
