@@ -1,8 +1,12 @@
-import 'package:appcinema/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
-
-import 'package:appcinema/presentation/delegates/search_movie_delegate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+
+import 'package:appcinema/domain/domain.dart';
+import 'package:appcinema/presentation/providers/providers.dart';
+import 'package:appcinema/presentation/delegates/search_movie_delegate.dart';
+import 'package:go_router/go_router.dart';
+
 
 class CustomAppBar extends ConsumerWidget {
   const CustomAppBar({super.key});
@@ -29,16 +33,23 @@ class CustomAppBar extends ConsumerWidget {
              const  Spacer(),
 
               IconButton(
-                onPressed: (){
+                onPressed: ()  {
 
-                  final movieRepository = ref.read( movieRepositoryProvider );
+                  final searchedMovies = ref.read( searchedMoviesProvider );
+                  final searchQuery = ref.read( searchQueryProvider );
 
-                  showSearch(
+                  showSearch<MovieEntity?>(
+                    query: searchQuery,
                     context: context, 
                     delegate: SearchMovieDelegate(
-                      searchMovies: movieRepository.serachMovies
+                      initialMovies: searchedMovies,
+                      searchMovies: ref.read( searchedMoviesProvider.notifier ).searchMoviesByQuery
                     )
-                  );
+                  ).then((movie)  {
+                    if(movie == null ) return;
+
+                    context.push('/movie/${ movie.id }');
+                  });
 
                 }, 
                 icon: const Icon(Icons.search))
