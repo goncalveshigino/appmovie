@@ -1,4 +1,4 @@
-import 'package:appcinema/presentation/views/views.dart';import 'package:go_router/go_router.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../presentation/screens/screens.dart';
 

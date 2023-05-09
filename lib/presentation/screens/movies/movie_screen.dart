@@ -2,7 +2,6 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:appcinema/presentation/providers/movies/movie_info_provider.dart';
 import 'package:appcinema/presentation/providers/providers.dart';
 
 import '../../../domain/entities/movie_entity.dart';
@@ -181,7 +180,8 @@ class _ActorsByMovie extends ConsumerWidget {
   }
 }
 
-class _CustomSliverAppBar extends StatelessWidget {
+class _CustomSliverAppBar extends ConsumerWidget {
+
   final MovieEntity movie;
 
   const _CustomSliverAppBar({
@@ -189,7 +189,7 @@ class _CustomSliverAppBar extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     final size = MediaQuery.of(context).size;
 
     return SliverAppBar(
@@ -198,22 +198,19 @@ class _CustomSliverAppBar extends StatelessWidget {
       foregroundColor: Colors.white,
       actions: [
         IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.favorite_border,
-              size: 30,
-            )) //Icons.favorite_rounded, color: Colors.red 30
+          onPressed: () {
+
+            ref.watch(localStorageRepositoryProvider).toogleFavorite(movie);
+
+          },
+          icon: const Icon( Icons.favorite_border, size: 30 ),
+        ) //Icons.favorite_rounded, color: Colors.red 30
       ],
       flexibleSpace: FlexibleSpaceBar(
         titlePadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        // title: Text(
-        //   movie.title,
-        //   style: const TextStyle(fontSize: 20),
-        //   textAlign: TextAlign.start,
-        // ),
+    
         background: Stack(
           children: [
-
             SizedBox.expand(
               child: Image.network(
                 movie.posterPath,
@@ -224,8 +221,7 @@ class _CustomSliverAppBar extends StatelessWidget {
                 },
               ),
             ),
-
-           const _CustomGrandient(
+            const _CustomGrandient(
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
               stops: [0.0, 0.2],
@@ -234,8 +230,7 @@ class _CustomSliverAppBar extends StatelessWidget {
                 Colors.transparent,
               ],
             ),
-
-          const _CustomGrandient(
+            const _CustomGrandient(
               begin: Alignment.topCenter,
               end: Alignment.bottomLeft,
               stops: [0.8, 1.0],
@@ -244,16 +239,15 @@ class _CustomSliverAppBar extends StatelessWidget {
                 Colors.black54,
               ],
             ),
-
             const SizedBox.expand(
               child: _CustomGrandient(
-                begin: Alignment.topLeft, 
-                stops: [0.0, 0.3], 
+                begin: Alignment.topLeft,
+                stops: [0.0, 0.3],
                 colors: [
-                  Colors.black87, 
-                Colors.transparent,
-                ], 
-                ),
+                  Colors.black87,
+                  Colors.transparent,
+                ],
+              ),
             ),
           ],
         ),
@@ -262,11 +256,7 @@ class _CustomSliverAppBar extends StatelessWidget {
   }
 }
 
-
-
-
 class _CustomGrandient extends StatelessWidget {
-
   final AlignmentGeometry begin;
   final AlignmentGeometry end;
   final List<double> stops;
@@ -277,7 +267,6 @@ class _CustomGrandient extends StatelessWidget {
     this.end = Alignment.centerRight,
     required this.stops,
     required this.colors,
-   
   });
 
   @override
