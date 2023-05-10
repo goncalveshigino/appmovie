@@ -13,14 +13,14 @@ class IsarDatasourceImpl extends LocalStorageDatasource {
   }
 
   Future<Isar> onpenDB() async {
-    
-   final Directory dir = await getApplicationDocumentsDirectory();
+    final Directory dir = await getApplicationDocumentsDirectory();
 
-    Directory('${dir.path}/dir').create(recursive: true)
+    Directory('${dir.path}/dir')
+        .create(recursive: true)
 // The created directory is returned as a Future.
-    .then((Directory directory) {
-  print('Path of New Dir: '+directory.path);
-});
+        .then((Directory directory) {
+      print('Path of New Dir: ' + directory.path);
+    });
 
     if (Isar.instanceNames.isEmpty) {
       return await Isar.open([
@@ -58,6 +58,7 @@ class IsarDatasourceImpl extends LocalStorageDatasource {
     if (favoriteMovie != null) {
       isar.writeTxnSync(
           () => isar.movieEntitys.deleteSync(favoriteMovie.isarId!));
+      return;
     }
 
     isar.writeTxnSync(() => isar.movieEntitys.putSync(movieEntity));

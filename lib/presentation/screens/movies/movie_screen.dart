@@ -180,6 +180,11 @@ class _ActorsByMovie extends ConsumerWidget {
   }
 }
 
+
+
+
+
+
 class _CustomSliverAppBar extends ConsumerWidget {
 
   final MovieEntity movie;
@@ -190,6 +195,8 @@ class _CustomSliverAppBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
+
+    final AsyncValue isFavoriteFuture = ref.watch(isFavoriteProvider(movie.id));
     final size = MediaQuery.of(context).size;
 
     return SliverAppBar(
@@ -202,13 +209,20 @@ class _CustomSliverAppBar extends ConsumerWidget {
 
             ref.watch(localStorageRepositoryProvider).toogleFavorite(movie);
 
+            ref.invalidate(isFavoriteProvider(movie.id));
           },
-          icon: const Icon( Icons.favorite_border, size: 30 ),
-        ) //Icons.favorite_rounded, color: Colors.red 30
+          icon: isFavoriteFuture.when(
+            loading: () => const CircularProgressIndicator(strokeWidth: 2 ),
+            data: (isFavorite) => isFavorite 
+            ? const Icon (Icons.favorite_rounded, color: Colors.red, size: 30)
+            : const Icon(Icons.favorite_border, size: 30),
+            error: (_, __) => throw UnimplementedError(), 
+          )
+         
+        ) 
       ],
       flexibleSpace: FlexibleSpaceBar(
         titlePadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-    
         background: Stack(
           children: [
             SizedBox.expand(
