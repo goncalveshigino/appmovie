@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../../config/helpers/human_format.dart';
 
 class MovieHorizontalListView extends StatefulWidget {
+
   final List<MovieEntity> movies;
   final String? title;
   final String? subTitle;
@@ -73,6 +74,7 @@ class _MovieHorizontalListViewState extends State<MovieHorizontalListView> {
 }
 
 class _Slide extends StatelessWidget {
+  
   final MovieEntity movie;
 
   const _Slide({required this.movie});
@@ -112,7 +114,7 @@ class _Slide extends StatelessWidget {
                   }
 
                   return GestureDetector(
-                    onTap: () => context.push('/movie/${ movie.id }'),
+                    onTap: () => context.push('/home/0/movie/${ movie.id }'),
                     child: FadeIn(child: child),
                   );
                   

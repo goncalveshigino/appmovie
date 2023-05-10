@@ -45,7 +45,7 @@ class MoviesNotifier extends StateNotifier<List<MovieEntity>> {
     if (isLoading) return;
 
     isLoading = true;
-    print('Loading more movies');
+  
 
     currentPage++;
 

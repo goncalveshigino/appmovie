@@ -1,102 +1,77 @@
+import 'package:appcinema/presentation/views/movies/populares_view.dart';
+import 'package:appcinema/presentation/views/views.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../providers/providers.dart';
 import '../../widgets/widgets.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+
   static const name = 'home_screen';
-  const HomeScreen({super.key});
+
+ // final Widget childView;
+ //final int pageIndex;
+ final int pageIndex;
+
+   HomeScreen({
+    super.key,
+    required this.pageIndex
+    //required this.childView,
+  });
 
   @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: _HomeView(),
-      bottomNavigationBar: CustomBottomNavigationBar(),
-    );
-  }
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeView extends ConsumerStatefulWidget {
-  const _HomeView();
+class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMixin {
 
-  @override
-  _HomeViewState createState() => _HomeViewState();
-}
+  late PageController pageController;
 
-class _HomeViewState extends ConsumerState<_HomeView> {
   @override
   void initState() {
-
     super.initState();
 
-    ref.read(nowPlayingMovieProvider.notifier).loadNextPage();
-    ref.read(popularMoviesProvider.notifier).loadNextPage();
-    ref.read(topRatedMovieProvider.notifier).loadNextPage();
-    ref.read(upComingMovieProvider.notifier).loadNextPage();
-
+    pageController = PageController(
+      keepPage: true
+    );
   }
 
   @override
-  Widget build(BuildContext context) {
-    
-    final initialLoading = ref.watch(initialLoadingProvider);
-
-    if(initialLoading) return const FullScreenLoader();
-
-    final slideShowMovies = ref.watch(moviesSlideShowProvider);
-    final nowPlayingMovies = ref.watch(nowPlayingMovieProvider);
-    final popularMonives = ref.watch(popularMoviesProvider);
-    final topRatedMovies = ref.watch(topRatedMovieProvider);
-    final upComingMovies = ref.watch(upComingMovieProvider);
-
-
-    return CustomScrollView(slivers: [
-      const SliverAppBar(
-        floating: true,
-        flexibleSpace: FlexibleSpaceBar(
-          title: CustomAppBar(),
-        ),
-      ),
-      SliverList(
-          delegate: SliverChildBuilderDelegate((context, index) {
-        return Column(
-          children: [
-            MoviesSlideShow(movies: slideShowMovies),
-            MovieHorizontalListView(
-              movies: nowPlayingMovies,
-              title: 'No Cinema',
-              subTitle: 'Lunes 20',
-              loadNextPage: () =>
-                  ref.read(nowPlayingMovieProvider.notifier).loadNextPage(),
-            ),
-            MovieHorizontalListView(
-              movies: upComingMovies,
-              title: 'Brevemente',
-              subTitle: 'Em Julho',
-              loadNextPage: () =>
-                  ref.read(upComingMovieProvider.notifier).loadNextPage(),
-            ),
-            MovieHorizontalListView(
-              movies: popularMonives,
-              title: 'Populares',
-              loadNextPage: () =>
-                  ref.read(popularMoviesProvider.notifier).loadNextPage(),
-            ),
-            MovieHorizontalListView(
-              movies: topRatedMovies,
-              title: 'Melhor Qualificacao',
-              subTitle: 'De todos os tempos',
-              loadNextPage: () =>
-                  ref.read(topRatedMovieProvider.notifier).loadNextPage(),
-            ),
-            const SizedBox(
-              height: 30,
-            )
-          ],
-        );
-      }, childCount: 1)),
-    ]);
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
   }
+
+  final viewRoutes = const <Widget>[
+      HomeView(), 
+      PopularView(), 
+      FavoritesViews()
+  ];
+
+  @override
+  Widget build(BuildContext context) { 
+    super.build(context);
+
+    if ( pageController.hasClients ) {
+        pageController.animateToPage(
+        widget.pageIndex, 
+        curve: Curves.easeInOut, 
+        duration: const Duration( milliseconds: 250),
+      );
+    }
+
+    return Scaffold(
+      //body: childView,
+      //body: IndexedStack( index: widget.pageIndex, children: viewRoutes ),
+      body: PageView(
+        physics: const NeverScrollableScrollPhysics(),
+        controller: pageController,
+        children: viewRoutes,
+      ),
+      bottomNavigationBar:  CustomBottomNavigationBar( currentIndex: widget.pageIndex,),
+    );
+  }
+  
+  @override
+  bool get wantKeepAlive => true;
+  
 }
