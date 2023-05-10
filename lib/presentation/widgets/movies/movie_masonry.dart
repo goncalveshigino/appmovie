@@ -31,7 +31,7 @@ class _MovieMasonryState extends State<MovieMasonry> {
     
       if (widget.loadNextPage == null) return;
 
-      if ((scrollController.position.pixels + 200) >=
+      if ((scrollController.position.pixels + 100) >=
           scrollController.position.maxScrollExtent) {
         widget.loadNextPage!();
       }

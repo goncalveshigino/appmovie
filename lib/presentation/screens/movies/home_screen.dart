@@ -1,4 +1,4 @@
-import 'package:appcinema/presentation/views/movies/categories_view.dart';
+import 'package:appcinema/presentation/views/movies/populares_view.dart';
 import 'package:appcinema/presentation/views/views.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +19,7 @@ class HomeScreen extends StatelessWidget {
 
   final viewRoutes = const <Widget>[
       HomeView(), 
-      CategoriesViews(), 
+      PopularesViews(), 
       FavoritesViews()
   ];
 

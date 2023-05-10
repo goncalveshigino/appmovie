@@ -16,6 +16,7 @@ class CustomAppBar extends ConsumerWidget {
 
   final colors = Theme.of(context).colorScheme;
   final titleStyle = Theme.of(context).textTheme.titleMedium;
+   final isDarkMode = ref.watch(themeNotifierProvider).isDarkMode;
 
 
     return  SafeArea(
@@ -52,7 +53,20 @@ class CustomAppBar extends ConsumerWidget {
                   });
 
                 }, 
-                icon: const Icon(Icons.search))
+                icon: const Icon(Icons.search),
+              ), 
+
+              IconButton(
+                 icon: Icon( isDarkMode 
+                  ? Icons.light_mode_outlined
+                  :    Icons.dark_mode_outlined
+                 ),
+                onPressed: ()  {
+                    ref.read( themeNotifierProvider.notifier).toggleDarkMode();
+                  //ref.read(isDarkModeProvider.notifier).update((state) => !state);
+                }, 
+              ), 
+
             ],
           ),
         ),

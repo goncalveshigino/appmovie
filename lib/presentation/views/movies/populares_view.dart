@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 
 
-class CategoriesViews extends StatelessWidget {
-  const CategoriesViews({super.key});
+class PopularesViews extends StatelessWidget {
+  const PopularesViews({super.key});
 
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
-        child: Text('Categorias Views'),
+        child: Text('Populares Views'),
       ),
     );
   }

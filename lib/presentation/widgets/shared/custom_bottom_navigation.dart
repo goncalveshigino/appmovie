@@ -52,8 +52,8 @@ class CustomBottomNavigationBar extends StatelessWidget {
         label: 'Inicio',
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.home_max),
-        label: 'Categorias',
+        icon: Icon(Icons.movie_creation_outlined),
+        label: 'Populares',
       ), 
       BottomNavigationBarItem(
         icon: Icon(Icons.favorite_outline),
