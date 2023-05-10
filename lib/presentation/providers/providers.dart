@@ -13,3 +13,4 @@ export 'actors/actors_repository_provider.dart';
 export 'search/search_movie_provider.dart';
 
 export 'storage/local_storage_provider.dart';
+export 'storage/favorite_movies_provider.dart';

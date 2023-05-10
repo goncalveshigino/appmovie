@@ -5,6 +5,7 @@ import '../../providers/providers.dart';
 import '../../widgets/widgets.dart';
 
 class HomeView extends ConsumerStatefulWidget {
+  
   const HomeView({ super.key });
 
   @override
