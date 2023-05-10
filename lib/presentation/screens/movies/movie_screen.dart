@@ -62,6 +62,7 @@ class _MovieDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     final size = MediaQuery.of(context).size;
     final textStyles = Theme.of(context).textTheme;
 
@@ -73,6 +74,7 @@ class _MovieDetails extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              
               ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: Image.network(
