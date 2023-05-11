@@ -37,4 +37,9 @@ class MovieRepositoryImpl extends MoviesRepository {
      return dataSource.serachMovies(query);
   }
   
+  @override
+  Future<List<MovieEntity>> getSimilarMovies(int movieId) {
+   return dataSource.getSimilarMovies(movieId);
+  }
+  
 }
