@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:animate_do/animate_do.dart';
 import 'package:appcinema/presentation/widgets/actors/actors_by_movie.dart';
+import 'package:appcinema/presentation/widgets/videos/videos_from_movie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -57,6 +60,7 @@ class MovieScreenState extends ConsumerState<MovieScreen> {
 }
 
 class _MovieDetails extends StatelessWidget {
+
   final MovieEntity movie;
 
   const _MovieDetails({
@@ -77,10 +81,12 @@ class _MovieDetails extends StatelessWidget {
 
         _Genres(movie: movie), 
 
-         ActorsByMovie(movieId: movie.id.toString()), 
+        ActorsByMovie(movieId: movie.id.toString()), 
 
+     
+        VideosFromMovie(movieId: movie.id),
 
-         SimilarMovies(movieId: movie.id ),
+        SimilarMovies(movieId: movie.id ),
      
       ],
     );
@@ -261,6 +267,9 @@ class _CustomSliverAppBar extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
 
     final AsyncValue isFavoriteFuture = ref.watch(isFavoriteProvider(movie.id));
+    final isDarkMode = ref.watch(themeNotifierProvider).isDarkMode;
+      
+    final scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
     final size = MediaQuery.of(context).size;
 
     return SliverAppBar(
@@ -287,9 +296,20 @@ class _CustomSliverAppBar extends ConsumerWidget {
         ) 
       ],
       flexibleSpace: FlexibleSpaceBar(
-        titlePadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        titlePadding: const EdgeInsets.only( bottom: 0), 
+        title: isDarkMode 
+        ? _CustomGrandient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          stops: const [0.7, 1.0],
+          colors: [
+            Colors.transparent,
+            scaffoldBackgroundColor
+          ]
+        ): null,
         background: Stack(
           children: [
+
             SizedBox.expand(
               child: Image.network(
                 movie.posterPath,
@@ -309,6 +329,7 @@ class _CustomSliverAppBar extends ConsumerWidget {
                 Colors.transparent,
               ],
             ),
+             
             const _CustomGrandient(
               begin: Alignment.topCenter,
               end: Alignment.bottomLeft,
@@ -318,16 +339,16 @@ class _CustomSliverAppBar extends ConsumerWidget {
                 Colors.black54,
               ],
             ),
-            const SizedBox.expand(
-              child: _CustomGrandient(
-                begin: Alignment.topLeft,
-                stops: [0.0, 0.3],
-                colors: [
-                  Colors.black87,
-                  Colors.transparent,
-                ],
-              ),
+
+            const _CustomGrandient(
+              begin: Alignment.topLeft,
+              stops: [0.0, 0.3],
+              colors: [
+                Colors.black87,
+                Colors.transparent,
+              ],
             ),
+
           ],
         ),
       ),

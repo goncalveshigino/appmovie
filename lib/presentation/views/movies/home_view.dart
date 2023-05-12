@@ -71,7 +71,7 @@ class HomeViewState extends ConsumerState<HomeView> with AutomaticKeepAliveClien
             MovieHorizontalListView(
               movies: topRatedMovies,
               title: 'Melhor Qualificacao',
-              subTitle: 'De todos os tempos',
+              subTitle: 'De todos...',
               loadNextPage: () =>
                   ref.read(topRatedMovieProvider.notifier).loadNextPage(),
             ),
