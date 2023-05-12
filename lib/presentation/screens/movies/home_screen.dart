@@ -12,7 +12,7 @@ class HomeScreen extends StatefulWidget {
  //final int pageIndex;
  final int pageIndex;
 
-   HomeScreen({
+  const HomeScreen({
     super.key,
     required this.pageIndex
     //required this.childView,

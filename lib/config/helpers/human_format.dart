@@ -5,14 +5,17 @@ import 'package:intl/intl.dart';
 class HumanFormat {
 
 
-  static  String number (double number, [ decimals = 0]){
+  static  String number (double number, [ int decimals = 0]){
 
-     final formattedNumber = NumberFormat.compactCurrency(
+     return NumberFormat.compactCurrency(
         decimalDigits: decimals, 
         symbol: '', 
         locale: 'en'
      ).format(number);
+  }
 
-     return formattedNumber;
+  static String shortDate( DateTime date ){
+    final format = DateFormat.yMMMEd('pt_PT');
+    return format.format(date);
   }
 }

@@ -166,8 +166,9 @@ class _Title extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.only(top: 10),
-      margin: const EdgeInsets.symmetric(horizontal: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 3),
       child: Row(
+        
         children: [
           if (title != null) Text(title!, style: titleStyle),
           const Spacer(),

@@ -1,4 +1,5 @@
 import 'package:appcinema/domain/entities/movie_entity.dart';
+import 'package:appcinema/domain/entities/video_entity.dart';
 
 
 
@@ -15,5 +16,9 @@ abstract class MoviesDataSource {
  Future<MovieEntity> getMovieById( String id);
 
  Future<List<MovieEntity>> serachMovies( String query );
+
+ Future<List<MovieEntity>> getSimilarMovies( int movieId ); 
+
+ Future<List<VideoEntity>> getYoutubeVideosById( int movieId );
 
 }

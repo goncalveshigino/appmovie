@@ -15,4 +15,6 @@ abstract class MoviesRepository {
 
  Future<List<MovieEntity>> serachMovies( String query );
 
+ Future<List<MovieEntity>> getSimilarMovies( int movieId );
+
 }

@@ -19,7 +19,7 @@ class IsarDatasourceImpl extends LocalStorageDatasource {
         .create(recursive: true)
 // The created directory is returned as a Future.
         .then((Directory directory) {
-      print('Path of New Dir: ' + directory.path);
+     // print('Path of New Dir: ' + directory.path);
     });
 
     if (Isar.instanceNames.isEmpty) {

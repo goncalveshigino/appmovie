@@ -1,10 +1,17 @@
+import 'dart:io';
+
 import 'package:animate_do/animate_do.dart';
+import 'package:appcinema/presentation/widgets/actors/actors_by_movie.dart';
+import 'package:appcinema/presentation/widgets/videos/videos_from_movie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:appcinema/presentation/providers/providers.dart';
 
+
+import '../../../config/helpers/human_format.dart';
 import '../../../domain/entities/movie_entity.dart';
+import '../../widgets/widgets.dart';
 
 class MovieScreen extends ConsumerStatefulWidget {
   static const name = 'movie-screen';
@@ -34,8 +41,7 @@ class MovieScreenState extends ConsumerState<MovieScreen> {
     final movie = ref.watch(movieInfoProvider)[widget.movieId];
 
     if (movie == null) {
-      return const Scaffold(
-          body: Center(child: CircularProgressIndicator(strokeWidth: 2)));
+      return const Scaffold( body: Center(child: CircularProgressIndicator(strokeWidth: 2)));
     }
 
     return Scaffold(
@@ -54,6 +60,7 @@ class MovieScreenState extends ConsumerState<MovieScreen> {
 }
 
 class _MovieDetails extends StatelessWidget {
+
   final MovieEntity movie;
 
   const _MovieDetails({
@@ -69,58 +76,119 @@ class _MovieDetails extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              
-              ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Image.network(
-                  movie.posterPath,
-                  width: size.width * 0.3,
-                ),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              SizedBox(
-                width: (size.width - 40) * 0.7,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(movie.title, style: textStyles.titleLarge),
-                    Text(movie.overview)
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: Wrap(
-            children: [
-              ...movie.genreIds.map((gender) => Container(
-                    margin: const EdgeInsets.only(right: 10),
-                    child: Chip(
-                      label: Text(gender),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)),
-                    ),
-                  ))
-            ],
-          ),
-        ),
-        _ActorsByMovie(movieId: movie.id.toString()),
-        const SizedBox(
-          height: 50,
-        )
+        
+        _TitleAndOverview(movie: movie, size: size, textStyles: textStyles,), 
+
+        _Genres(movie: movie), 
+
+        ActorsByMovie(movieId: movie.id.toString()), 
+
+     
+        VideosFromMovie(movieId: movie.id),
+
+        SimilarMovies(movieId: movie.id ),
+     
       ],
     );
   }
 }
+
+
+class _TitleAndOverview extends StatelessWidget {
+
+  const _TitleAndOverview({
+    required this.movie,
+    required this.size,
+    required this.textStyles,
+  });
+
+  final MovieEntity movie;
+  final Size size;
+  final TextTheme textStyles;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric( horizontal: 8, vertical: 15),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          
+          // Imagen
+          ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: Image.network(
+              movie.posterPath,
+              width: size.width * 0.3,
+            ),
+          ),
+
+          const SizedBox( width: 10 ),
+
+          // Descripción
+          SizedBox(
+            width: (size.width - 40) * 0.7,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text( movie.title, style: textStyles.titleLarge ),
+                Text( movie.overview ),
+
+                const SizedBox(height: 10 ),
+                
+                MovieRating(voteAverage: movie.voteAverage ),
+
+                Row(
+                  children: [
+                    const Text('Estreno:', style: TextStyle(fontWeight: FontWeight.bold)),
+                    const SizedBox(width: 5 ),
+                    Text(HumanFormat.shortDate(movie.releaseDate))
+                  ],
+                )
+              ],
+            ),
+          )
+
+        ],
+      ),
+    );
+  }
+}
+
+
+class _Genres extends StatelessWidget {
+  const _Genres({
+    required this.movie,
+  });
+
+  final MovieEntity movie;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: SizedBox(
+        width: double.infinity,
+        child: Wrap(
+          crossAxisAlignment: WrapCrossAlignment.center,
+          alignment: WrapAlignment.center,
+          children: [
+            ...movie.genreIds.map((gender) => Container(
+              margin: const EdgeInsets.only( right: 10),
+              child: Chip(
+                label: Text( gender ),
+                shape: RoundedRectangleBorder( borderRadius: BorderRadius.circular(20)),
+              ),
+            ))
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+
 
 class _ActorsByMovie extends ConsumerWidget {
   final String movieId;
@@ -199,6 +267,9 @@ class _CustomSliverAppBar extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
 
     final AsyncValue isFavoriteFuture = ref.watch(isFavoriteProvider(movie.id));
+    final isDarkMode = ref.watch(themeNotifierProvider).isDarkMode;
+      
+    final scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
     final size = MediaQuery.of(context).size;
 
     return SliverAppBar(
@@ -225,9 +296,20 @@ class _CustomSliverAppBar extends ConsumerWidget {
         ) 
       ],
       flexibleSpace: FlexibleSpaceBar(
-        titlePadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        titlePadding: const EdgeInsets.only( bottom: 0), 
+        title: isDarkMode 
+        ? _CustomGrandient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          stops: const [0.7, 1.0],
+          colors: [
+            Colors.transparent,
+            scaffoldBackgroundColor
+          ]
+        ): null,
         background: Stack(
           children: [
+
             SizedBox.expand(
               child: Image.network(
                 movie.posterPath,
@@ -247,6 +329,7 @@ class _CustomSliverAppBar extends ConsumerWidget {
                 Colors.transparent,
               ],
             ),
+             
             const _CustomGrandient(
               begin: Alignment.topCenter,
               end: Alignment.bottomLeft,
@@ -256,16 +339,16 @@ class _CustomSliverAppBar extends ConsumerWidget {
                 Colors.black54,
               ],
             ),
-            const SizedBox.expand(
-              child: _CustomGrandient(
-                begin: Alignment.topLeft,
-                stops: [0.0, 0.3],
-                colors: [
-                  Colors.black87,
-                  Colors.transparent,
-                ],
-              ),
+
+            const _CustomGrandient(
+              begin: Alignment.topLeft,
+              stops: [0.0, 0.3],
+              colors: [
+                Colors.black87,
+                Colors.transparent,
+              ],
             ),
+
           ],
         ),
       ),
@@ -274,6 +357,7 @@ class _CustomSliverAppBar extends ConsumerWidget {
 }
 
 class _CustomGrandient extends StatelessWidget {
+
   final AlignmentGeometry begin;
   final AlignmentGeometry end;
   final List<double> stops;
@@ -302,3 +386,69 @@ class _CustomGrandient extends StatelessWidget {
     );
   }
 }
+
+
+
+
+  //  Padding(
+  //         padding: const EdgeInsets.all(8),
+  //         child: Row(
+  //           crossAxisAlignment: CrossAxisAlignment.start,
+  //           children: [
+              
+  //             ClipRRect(
+  //               borderRadius: BorderRadius.circular(20),
+  //               child: Image.network(
+  //                 movie.posterPath,
+  //                 width: size.width * 0.3,
+  //               ),
+  //             ),
+
+  //             const SizedBox(
+  //               width: 10,
+  //             ),
+
+  //             SizedBox(
+  //               width: (size.width - 40) * 0.7,
+  //               child: Column(
+  //                 crossAxisAlignment: CrossAxisAlignment.start,
+  //                 children: [
+  //                   Text(movie.title, style: textStyles.titleLarge),
+  //                   Text(movie.overview),
+
+  //                  const SizedBox( height: 10,), 
+
+  //                    MovieRating(voteAverage: movie.voteAverage ),
+
+  //                    Row(
+  //                     children: [
+  //                       const Text('Estreno:', style: TextStyle(fontWeight: FontWeight.bold)),
+  //                       const SizedBox(width: 5 ),
+  //                       Text(HumanFormat.shortDate(movie.releaseDate))
+  //                     ],
+  //                   )
+  //                 ],
+  //               ),
+  //             )
+  //           ],
+  //         ),
+  //       ),
+  //       Padding(
+  //         padding: const EdgeInsets.all(8),
+  //         child: Wrap(
+  //           children: [
+  //             ...movie.genreIds.map((gender) => Container(
+  //                   margin: const EdgeInsets.only(right: 10),
+  //                   child: Chip(
+  //                     label: Text(gender),
+  //                     shape: RoundedRectangleBorder(
+  //                         borderRadius: BorderRadius.circular(20)),
+  //                   ),
+  //                 ))
+  //           ],
+  //         ),
+  //       ),
+  //       _ActorsByMovie(movieId: movie.id.toString()),
+  //       const SizedBox(
+  //         height: 50,
+  //       )

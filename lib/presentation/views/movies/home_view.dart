@@ -36,7 +36,6 @@ class HomeViewState extends ConsumerState<HomeView> with AutomaticKeepAliveClien
 
     final slideShowMovies = ref.watch(moviesSlideShowProvider);
     final nowPlayingMovies = ref.watch(nowPlayingMovieProvider);
-    final popularMonives = ref.watch(popularMoviesProvider);
     final topRatedMovies = ref.watch(topRatedMovieProvider);
     final upComingMovies = ref.watch(upComingMovieProvider);
 
@@ -52,7 +51,9 @@ class HomeViewState extends ConsumerState<HomeView> with AutomaticKeepAliveClien
           delegate: SliverChildBuilderDelegate((context, index) {
         return Column(
           children: [
+
             MoviesSlideShow(movies: slideShowMovies),
+
             MovieHorizontalListView(
               movies: nowPlayingMovies,
               title: 'No Cinema',
@@ -70,7 +71,7 @@ class HomeViewState extends ConsumerState<HomeView> with AutomaticKeepAliveClien
             MovieHorizontalListView(
               movies: topRatedMovies,
               title: 'Melhor Qualificacao',
-              subTitle: 'De todos os tempos',
+              subTitle: 'De todos...',
               loadNextPage: () =>
                   ref.read(topRatedMovieProvider.notifier).loadNextPage(),
             ),
