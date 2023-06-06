@@ -4,6 +4,7 @@ import 'package:appcinema/infrastructure/models/moviedb/movie_moviedb.dart';
 import '../models/moviedb/movie_details.dart';
 
 class MovieMapper {
+  
   static MovieEntity movieDBToEntity(MovieMovieDB movieDb) => MovieEntity(
         adult: movieDb.adult,
         backdropPath: (movieDb.backdropPath != '')

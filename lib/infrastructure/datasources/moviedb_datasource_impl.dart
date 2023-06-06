@@ -20,8 +20,9 @@ class MoviedbDatasourceImpl extends MoviesDataSource {
       baseUrl: 'https://api.themoviedb.org/3',
       queryParameters: {
         'api_key': Environment.theMovieDbKey, 
-        'language': 'pt-Pt'
-      } 
+        'language': 'pt-Pt', 
+        
+      }, 
     )
   );
 
@@ -130,6 +131,7 @@ class MoviedbDatasourceImpl extends MoviesDataSource {
 
   @override
   Future<List<VideoEntity>> getYoutubeVideosById(int movieId) async {
+    
      final response = await dio.get('/movie/$movieId/videos');
      final moviedbVideosResponse = MoviedbVideosResponse.fromJson(response.data);
      final List<VideoEntity> videos = [];

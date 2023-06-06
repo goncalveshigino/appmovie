@@ -4,6 +4,7 @@ import 'package:appcinema/domain/entities/video_entity.dart';
 import 'package:appcinema/domain/repositories/movies_repository.dart';
 
 class MovieRepositoryImpl extends MoviesRepository {
+  
   final MoviesDataSource dataSource;
   MovieRepositoryImpl(this.dataSource);
 
